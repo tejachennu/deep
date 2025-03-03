@@ -330,10 +330,8 @@ export async function createSubscriptionDonation(formData: FormData) {
 // Verify payment and update database
 export async function verifyPayment(orderId: string, paymentId: string, signature: string) {
 
-  const baseUrl = "http://localhost:3000";
-
   try {
-    const response = await fetch(`/api/razorpay/verify-payment`, {
+    const response = await fetch(`https://deep-qd13.vercel.app/api/razorpay/verify-payment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
