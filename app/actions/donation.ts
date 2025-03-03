@@ -333,7 +333,7 @@ export async function verifyPayment(orderId: string, paymentId: string, signatur
   const baseUrl = "http://localhost:3000";
 
   try {
-    const response = await fetch(`${baseUrl}/api/razorpay/verify-payment`, {
+    const response = await fetch(`/api/razorpay/verify-payment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
