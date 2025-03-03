@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache"
 import axios from "axios"
 import { z } from "zod"
 import Razorpay from "razorpay";
+import crypto from "crypto"
+import { env } from "@/lib/env"
 
 const razorpay = new Razorpay({
   key_id: 'rzp_test_j2X7xk2nK287Ri',
@@ -83,104 +85,6 @@ export async function createDonation(formData: FormData) {
   }
 }
 
-
-// export async function createSubscription(name: string, email: string, phone: string, amount: number, frequency: "monthly" | "yearly", duration: number) {
-//   try {
-
-//     const keySecret = "zV641NZ9ocDm8fRhO7QqAco6";
-//     const keyId = "rzp_test_j2X7xk2nK287Ri";
-//     const Plans = [
-//       { id: "plan_Q1vnu0qLfa2V6Z", name: "Platinum Plan Yearly", amount: 15000 , frequency: "yearly"},
-//       { id: "plan_Q1vnXB7MiMDoDR", name: "Gold Plan Yearly", amount: 7500 , frequency: "yearly"},
-//       { id: "plan_Q1vnAemMuSzMDt", name: "Silver Plan Yearly", amount: 3500 , frequency: "yearly"},
-//       { id: "plan_Q1vmkWhJ2v1WjC", name: "Bronze Plan Yearly", amount: 1500, frequency: "yearly" },
-//       { id: "plan_Q1vjSBvodUh83U", name: "Platinum Plan Monthly", amount: 200 , frequency: "monthly"},
-//       { id: "plan_Q1vids2Ywra2zl", name: "Gold Plan Monthly", amount: 500, frequency: "monthly" },
-//       { id: "plan_Q1vi9LJc7xyYrX", name: "Silver Plan Monthly", amount: 1000 , frequency: "monthly"},
-//       { id: "plan_Q1vhN25ckhXhiH", name: "Bronze Plan Monthly", amount: 5000 , frequency: "monthly"},
-//     ];
-
-
-
-//     if (!keyId || !keySecret) {
-//       throw new Error("❌ Razorpay API keys are missing!");
-//     }
-
-//     if (!amount || amount <= 0) {
-//       throw new Error("❌ Invalid amount. Amount must be greater than zero.");
-//     }
-
-
-
-
-//     // 1️⃣ Create Plan
-//     const planDetails = {
-//       period: frequency, // "monthly" or "yearly"
-//       interval: 1,
-//       item: {
-//         name: `${frequency.charAt(0).toUpperCase() + frequency.slice(1)} Donation Plan`,
-//         amount: amount * 100, // Convert ₹ to paise
-//         currency: "INR",
-//         description: `Recurring donation of ₹${amount} (${frequency})`,
-//       },
-//       notes: {
-//         createdBy: "Subscription API",
-//       },
-//     };
-
-//     console.log("🛠️ Creating Plan with Details:", planDetails);
-
-//     const planResponse = await axios.post("https://api.razorpay.com/v1/plans", planDetails, {
-//       auth: {
-//         username: keyId,
-//         password: keySecret,
-//       },
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     if (!planResponse.data.id) {
-//       throw new Error("❌ Failed to create plan: " + (planResponse.data.error?.description || "Unknown error"));
-//     }
-
-//     console.log("✅ Plan Created Successfully:", planResponse.data);
-
-//     // 2️⃣ Create Subscription
-//     const subscriptionDetails = {
-//       plan_id: planResponse.data.id, // Use the newly created plan ID
-//       total_count: frequency === "monthly" ? 12 : 5, // 12 for monthly, 1 for yearly
-//       customer_notify: 1,
-//       notes: { name, email, phone },
-//     };
-
-//     console.log("🛠️ Creating Subscription with Details:", subscriptionDetails);
-
-//     const subscriptionResponse = await axios.post("https://api.razorpay.com/v1/subscriptions", subscriptionDetails, {
-//       auth: {
-//         username: keyId,
-//         password: keySecret,
-//       },
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     if (!subscriptionResponse.data.id) {
-//       throw new Error("❌ Failed to create subscription: " + (subscriptionResponse.data.error?.description || "Unknown error"));
-//     }
-
-//     console.log("✅ Subscription Created Successfully:", subscriptionResponse.data);
-
-//     return {
-//       success: true,
-//       subscription: subscriptionResponse.data,
-//     };
-//   } catch (error) {
-//     console.error("🚨 Subscription Creation Error:", error || error);
-//     return { success: false, error: error || error };
-//   }
-// }
 
 export async function createSubscription(
   name: string,
@@ -276,6 +180,21 @@ export async function createSubscription(
       },
     });
 
+    let donor: any[] = await executeQuery("SELECT id FROM donors WHERE email = ?", [email]);
+    if (donor.length == 0) {
+      await executeQuery("INSERT INTO donors (name, email, phone) VALUES (?, ?, ?)", [name, email, phone]);
+      donor = await executeQuery("SELECT id FROM donors WHERE email = ?", [email]);
+    }
+
+    const donor_id = donor[0].id;
+    await executeQuery(
+      `INSERT INTO subscriptions (donor_id, razorpay_subscription_id, plan_id, status, amount, currency, frequency) 
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [donor_id, subscriptionResponse.data.id, planId, subscriptionResponse.data.status, amount, "INR", frequency]
+    );
+
+  
+
     if (!subscriptionResponse.data.id) {
       throw new Error("❌ Failed to create subscription: " + (subscriptionResponse.data.error?.description || "Unknown error"));
     }
@@ -291,8 +210,6 @@ export async function createSubscription(
     return { success: false, error: error  };
   }
 }
-
-
 
 
 export async function createSubscriptionDonation(formData: FormData) {
@@ -311,7 +228,7 @@ export async function createSubscriptionDonation(formData: FormData) {
     const subscriptionResponse = await createSubscription(name, email, phone, amount, frequency ,duration);
 
     if (!subscriptionResponse.success) {
-      throw new Error(subscriptionResponse);
+      throw new Error(JSON.stringify(subscriptionResponse));
     }
 
     return {
@@ -324,8 +241,6 @@ export async function createSubscriptionDonation(formData: FormData) {
     return { success: false, error: "Failed to create subscription" };
   }
 }
-
-
 
 // Verify payment and update database
 export async function verifyPayment(orderId: string, paymentId: string, signature: string) {

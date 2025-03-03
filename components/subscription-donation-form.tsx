@@ -36,12 +36,10 @@ export default function SubscriptionDonationForm() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    debugger
     event.preventDefault()
     setIsLoading(true)
 
     try {
-      debugger
       const formData = new FormData(event.currentTarget)
       formData.set("amount", amount.toString())
       formData.set("frequency", frequency)
