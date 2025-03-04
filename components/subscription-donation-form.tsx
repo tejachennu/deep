@@ -65,7 +65,7 @@ export default function SubscriptionDonationForm() {
       const options = {
         key: clientEnv.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id: result.subscription.id,
-        name: "Donation Platform",
+        name: "Deep",
         description: `${formData.get("frequency")} donation subscription`,
         prefill: {
           name: result.donor.name,
@@ -115,8 +115,12 @@ export default function SubscriptionDonationForm() {
             <Input id="email" name="email" type="email" required />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone (optional)</Label>
-            <Input id="phone" name="phone" type="tel" />
+            <Label htmlFor="phone">Phone</Label>
+            <Input id="phone" name="phone" required type="tel" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="pan">Pan (Optional)</Label>
+            <Input id="pan" name="pan"  type="tel" />
           </div>
           <div className="space-y-2">
             <Label>Donation Amount (₹)</Label>
@@ -138,19 +142,6 @@ export default function SubscriptionDonationForm() {
               required
             />
           </div>
-          {/* <div className="space-y-2">
-            <Label>Frequency</Label>
-            <RadioGroup defaultValue="monthly" name="frequency" className="flex flex-col space-y-1">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="monthly" id="monthly" />
-                <Label htmlFor="monthly">Monthly</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="yearly" id="yearly" />
-                <Label htmlFor="yearly">Yearly</Label>
-              </div>
-            </RadioGroup>
-          </div> */}
 
 <div className="space-y-4">
       {/* Frequency Dropdown */}
@@ -171,13 +162,13 @@ export default function SubscriptionDonationForm() {
       {frequency === "monthly" && (
         <div className="space-y-2">
           <Label>Duration (Months)</Label>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1">
             {["3", "6", "12"].map((value) => (
               <button
                 key={value}
                 type="button"
-                className={`px-2 py-2 font-medium border rounded ${
-                  duration === value ? "bg-blue-500 text-white" : "bg-gray-200"
+                className={` border rounded text-sm px-2 py-2 ${
+                  duration === value ? "bg-blue-500 text-white" : "bg-white"
                 }`}
                 onClick={() => handleDurationChange(value)}
               >
@@ -186,8 +177,8 @@ export default function SubscriptionDonationForm() {
             ))}
             <button
               type="button"
-              className={`px-4 py-2 border rounded ${
-                customDuration ? "bg-blue-500 text-white" : "bg-gray-200"
+              className={`text-sm px-3 py-2  border rounded ${
+                customDuration ? "bg-blue-500 text-white" : "bg-white"
               }`}
               onClick={() => setDuration("")}
             >
@@ -215,8 +206,8 @@ export default function SubscriptionDonationForm() {
               <button
                 key={value}
                 type="button"
-                className={`px-4 py-2 border rounded ${
-                  duration === value ? "bg-blue-500 text-white" : "bg-gray-200"
+                className={`text-sm px-3 py-2  border rounded ${
+                  duration === value ? "bg-blue-500 text-white" : "bg-white"
                 }`}
                 onClick={() => handleDurationChange(value)}
               >
@@ -225,8 +216,8 @@ export default function SubscriptionDonationForm() {
             ))}
             <button
               type="button"
-              className={`px-4 py-2 border rounded ${
-                customDuration ? "bg-blue-500 text-white" : "bg-gray-200"
+              className={`text-sm px-3 py-2  border rounded ${
+                customDuration ? "bg-blue-500 text-white" : "bg-white"
               }`}
               onClick={() => setDuration("")}
             >

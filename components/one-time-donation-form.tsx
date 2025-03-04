@@ -22,6 +22,9 @@ export default function OneTimeDonationForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const fixedAmounts = [200, 500, 1000, 5000]
+  const [amount, setAmount] = useState()
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -102,21 +105,48 @@ export default function OneTimeDonationForm() {
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
-            <Input id="name" name="name" required />
+            <Label>Donation Amount (₹)</Label>
+            <div className="flex flex-wrap gap-2">
+              {fixedAmounts.map((amt) => (
+                <Button key={amt} type="button" variant={amount === amt ? "default" : "outline"} onClick={() => setAmount(amt)}>
+                  ₹{amt}
+                </Button>
+              ))}
+            </div>
+            <Input
+              id="amount"
+              name="amount"
+              type="number"
+              min="1"
+              step="1"
+              value={amount}
+              placeholder="Enter custom amount"
+              onChange={(e) => setAmount(Number(e.target.value))}
+              required
+            />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone (optional)</Label>
-            <Input id="phone" name="phone" type="tel" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="amount">Donation Amount (₹)</Label>
-            <Input id="amount" name="amount" type="number" min="1" step="1" defaultValue="100" required />
-          </div>
+
+          { amount > 0 && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" name="name" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone </Label> 
+                  <Input id="phone" name="phone" type="tel" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" name="email" type="email" required />
+                </div>
+                <div className="space-y-2">
+                      <Label htmlFor="pan">Pan (Optional)</Label>
+                      <Input id="pan" name="pan"  type="tel" />
+                </div>
+              </>
+            )
+          }
         </CardContent>
         <CardFooter>
           <Button type="submit" className="w-full" disabled={isLoading}>
