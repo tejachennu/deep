@@ -10,19 +10,22 @@ export default function Home() {
       <Card className="w-full max-w-md mx-auto bg-white shadow-lg rounded-xl relative overflow-visible pb-6">
   {/* Floating Logo - Adjusted */}
   <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full shadow-md">
-    <Image src="/DEEP Logo.png" width={200} height={200} alt="Logo" className="rounded-md" />
+    <Image src="/Deep_Signature_logo_200x100[1].png" width={60} height={60} alt="Logo" className="rounded-md" />
   </div>
 
   {/* Text Content */}
-  {/* <div className="text-center pt-14 px-6">
-    <p className="text-lg font-semibold text-gray-800">
-      DEEP Disease Eradication Through Education and Prevention TRUST
+  <div className="text-center pt-10 px-6">
+    <p className="text-sm font-semibold text-gray-800">
+      DEEP Disease Eradication 
     </p>
-  </div> */}
+    <p className="text-sm font-semibold text-gray-800">
+    Through Education and Prevention TRUST
+    </p>
+  </div>
 
 
         {/* Donation Heading */}
-        <div className="text-center px-6 pt-14">
+        <div className="text-center px-6 ">
           <h1 className="text-2xl font-bold mb-2">Support Our Cause</h1>
           <p className="text-gray-600">
             Your donation helps us make a difference. Choose a one-time donation or become a regular supporter.
