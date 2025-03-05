@@ -13,7 +13,7 @@ const envSchema = z.object({
 
 // For client components
 export const clientEnv = {
-  NEXT_PUBLIC_RAZORPAY_KEY_ID: 'rzp_test_j2X7xk2nK287Ri' ,
+  NEXT_PUBLIC_RAZORPAY_KEY_ID: 'rzp_live_Zl5mVSbnDgUKF8' ,
 }
 
 // For server components
@@ -29,14 +29,14 @@ export const clientEnv = {
 // }
 
 export const env = {
-  RAZORPAY_KEY_ID: 'rzp_test_j2X7xk2nK287Ri',
-  RAZORPAY_KEY_SECRET: 'zV641NZ9ocDm8fRhO7QqAco6',
+  RAZORPAY_KEY_ID: 'rzp_live_Zl5mVSbnDgUKF8',
+  RAZORPAY_KEY_SECRET: 'xYHpqE9nhJw7xmJVfCSdyegv',
   MYSQL_HOST: '194.163.45.105',
   MYSQL_PORT: `3306`,
   MYSQL_USER: 'Deep',
   MYSQL_PASSWORD: 'Deep@123',
   MYSQL_DATABASE: 'deep_payments',
-  NEXT_PUBLIC_RAZORPAY_KEY_ID: 'rzp_test_j2X7xk2nK287Ri',
+  NEXT_PUBLIC_RAZORPAY_KEY_ID: 'rzp_live_Zl5mVSbnDgUKF8',
 }
 
 // Validate environment variables

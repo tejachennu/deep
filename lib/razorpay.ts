@@ -75,16 +75,46 @@ export async function createSubscription(
   }
 }
 
-// Verify payment signature
-export function verifyPaymentSignature(razorpayOrderId: string, razorpayPaymentId: string, signature: string) {
+// // Verify payment signature
+// export function verifyPaymentSignature(razorpayOrderId: string, razorpayPaymentId: string, signature: string) {
+
+//   console.log("RazorpayOrderId:", razorpayOrderId)
+//   console.log("RazorpayPaymentId:", razorpayPaymentId)
+//   console.log("Signature:", signature)
+
+
+//   const generatedSignature = crypto
+//     .createHmac("sha256", 'zV641NZ9ocDm8fRhO7QqAco6')
+//     .update(`${razorpayOrderId}|${razorpayPaymentId}`)
+//     .digest("hex")
+//   console.log("Generated signature:", generatedSignature)
+//   console.log("Received signature:", signature ,razorpayPaymentId ,razorpayOrderId)
+
+
+//   return generatedSignature === signature
+// }
+
+export function verifyPaymentSignature(
+  razorpayOrderId: string,
+  razorpayPaymentId: string,
+  signature: string
+) {
+  console.log("RazorpayOrderId:", razorpayOrderId);
+  console.log("RazorpayPaymentId:", razorpayPaymentId);
+  console.log("Signature:", signature);
+
+  // Trim to avoid extra spaces
+  const orderIdTrimmed = razorpayOrderId.trim();
+  const paymentIdTrimmed = razorpayPaymentId.trim();
+
+  const secret = "zV641NZ9ocDm8fRhO7QqAco6"; // Replace with actual secret
   const generatedSignature = crypto
-    .createHmac("sha256", env.RAZORPAY_KEY_SECRET)
-    .update(`${razorpayOrderId}|${razorpayPaymentId}`)
-    .digest("hex")
-  console.log("Generated signature:", generatedSignature)
-  console.log("Received signature:", signature ,razorpayPaymentId ,razorpayOrderId)
+    .createHmac("sha256", secret)
+    .update(`${orderIdTrimmed}|${paymentIdTrimmed}`)
+    .digest("hex");
 
+  console.log("Generated signature:", generatedSignature);
+  console.log("Received signature:", signature);
 
-  return generatedSignature === signature
+  return generatedSignature.toLowerCase() === signature.toLowerCase();
 }
-

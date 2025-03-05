@@ -10,8 +10,8 @@ import crypto from "crypto"
 import { env } from "@/lib/env"
 
 const razorpay = new Razorpay({
-  key_id: 'rzp_test_j2X7xk2nK287Ri',
-  key_secret: 'zV641NZ9ocDm8fRhO7QqAco6',
+  key_id: 'rzp_live_Zl5mVSbnDgUKF8',
+  key_secret: 'xYHpqE9nhJw7xmJVfCSdyegv',
 });
 
 
@@ -95,8 +95,8 @@ export async function createSubscription(
   duration: number
 ) {
   try {
-    const keySecret = "zV641NZ9ocDm8fRhO7QqAco6";
-    const keyId = "rzp_test_j2X7xk2nK287Ri";
+    const keySecret = "xYHpqE9nhJw7xmJVfCSdyegv";
+    const keyId = "rzp_live_Zl5mVSbnDgUKF8";
 
     const Plans = [
       { id: "plan_Q1vnu0qLfa2V6Z", name: "Platinum Plan Yearly", amount: 15000, frequency: "yearly" },
@@ -246,7 +246,7 @@ export async function createSubscriptionDonation(formData: FormData) {
 export async function verifyPayment(orderId: string, paymentId: string, signature: string) {
 
   try {
-    const response = await fetch(`https://deep-qd13.vercel.app/api/razorpay/verify-payment`, {
+    const response = await fetch(`https://donation.deepindia.org/api/razorpay/verify-payment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

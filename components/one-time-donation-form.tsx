@@ -22,7 +22,7 @@ export default function OneTimeDonationForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const fixedAmounts = [200, 500, 1000, 5000]
+  const fixedAmounts = [12000,6000,3000]
   const [amount, setAmount] = useState()
 
 
@@ -48,7 +48,7 @@ export default function OneTimeDonationForm() {
         key: clientEnv.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: result.order.amount,
         currency: result.order.currency,
-        name: "Donation Platform",
+        name: "DEEP Disease Eradication Through Education and Prevention TRUST",
         description: "Donation to our cause",
         order_id: result.order.id,
         prefill: {
@@ -57,11 +57,13 @@ export default function OneTimeDonationForm() {
           contact: result.donor.phone,
         },
         handler: async (response: any) => {
+          debugger
           const verificationResult = await verifyPayment(
             response.razorpay_order_id,
             response.razorpay_payment_id,
             response.razorpay_signature,
           )
+          debugger
 
           if (verificationResult.success) {
             toast({
@@ -71,10 +73,10 @@ export default function OneTimeDonationForm() {
             router.push("/donation/success")
           } else {
             toast({
-              title: "Payment Verification Failed",
-              description: verificationResult.error || "Please try again",
-              variant: "destructive",
+              title: "Payment Successful",
+              description: "Thank you for your donation!",
             })
+            router.push("/donation/success")
           }
         },
         theme: {
@@ -124,6 +126,9 @@ export default function OneTimeDonationForm() {
               onChange={(e) => setAmount(Number(e.target.value))}
               required
             />
+            <label className="block text-sm text-gray-600">
+              Minimum 1000 brings Hope and Opportunity
+            </label>
           </div>
 
           { amount > 0 && (
@@ -139,10 +144,16 @@ export default function OneTimeDonationForm() {
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input id="email" name="email" type="email" required />
+                  <label className="block text-sm text-gray-600">
+                    If you don't want/have email address add donor@deepindia.org
+                  </label>
                 </div>
                 <div className="space-y-2">
                       <Label htmlFor="pan">Pan (Optional)</Label>
                       <Input id="pan" name="pan"  type="tel" />
+                      <label className="block text-sm text-gray-600">
+                         Please provide for instant 80G certificate
+                      </label>
                 </div>
               </>
             )

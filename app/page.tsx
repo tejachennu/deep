@@ -34,16 +34,16 @@ export default function Home() {
 
         {/* Tabs for Donations */}
         <Tabs defaultValue="one-time" className="w-full max-w-md px-6 mt-4">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 rounded-lg">
+          {/* <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 rounded-lg">
             <TabsTrigger value="one-time" className="py-2 rounded-lg">One-Time Donation</TabsTrigger>
             <TabsTrigger value="subscription" className="py-2 rounded-lg">Monthly/Yearly</TabsTrigger>
-          </TabsList>
+          </TabsList> */}
           <TabsContent value="one-time">
             <OneTimeDonationForm />
           </TabsContent>
-          <TabsContent value="subscription">
+          {/* <TabsContent aria-disabled value="subscription">
             <SubscriptionDonationForm />
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </Card>
     </main>
