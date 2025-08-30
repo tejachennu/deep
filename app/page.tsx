@@ -28,7 +28,7 @@ export default function Home() {
         <div className="text-center px-6 ">
           <h1 className="text-2xl font-bold mb-2">Support Our Cause</h1>
           <p className="text-gray-600">
-            Your donation helps us make a difference. Choose a one-time donation or become a regular supporter.
+            Your donation helps us make a difference. Choose a one-time donation or become a supporter.
           </p>
         </div>
 
